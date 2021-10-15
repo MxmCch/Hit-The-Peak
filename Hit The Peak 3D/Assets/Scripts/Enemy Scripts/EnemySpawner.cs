@@ -34,25 +34,26 @@ public class EnemySpawner : MonoBehaviour
 
     bool skipOne = false;
     private void OnEnable() {
+        StartCoroutine(SpawnEnemy());
+    }
+
+    IEnumerator SpawnEnemy(){
+        
         if (skipOne)
         {
-            StartCoroutine(SpawnEnemy());
+            while(true)
+            {
+                this.transform.GetChild(Random.Range(0,this.transform.childCount)).gameObject.SetActive(true);
+                if (1.5f < spawnDelay)
+                {
+                    spawnDelay -= 0.15f * spawnDelayDelayer;
+                }
+                yield return new WaitForSeconds(spawnDelay);
+            }
         }
         else
         {
             skipOne = true;
-        }
-    }
-
-    IEnumerator SpawnEnemy(){
-        while(true)
-        {
-            this.transform.GetChild(Random.Range(0,this.transform.childCount)).gameObject.SetActive(true);
-            if (1.5f < spawnDelay)
-            {
-                spawnDelay -= 0.15f * spawnDelayDelayer;
-            }
-            yield return new WaitForSeconds(spawnDelay);
         }
     }
 }

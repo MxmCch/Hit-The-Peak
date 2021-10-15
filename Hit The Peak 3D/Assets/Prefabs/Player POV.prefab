@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7811225582292031932}
   - component: {fileID: 7811225582292031931}
   - component: {fileID: 7811225582292031928}
+  - component: {fileID: 1525221994}
   m_Layer: 0
   m_Name: Player POV
   m_TagString: MainCamera
@@ -97,11 +98,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 060f191ba6d1a8d4bb62d3d688e5ea6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerStats: {fileID: 1525221994}
+  shootSounds: {fileID: 7811225582292031928}
+  audioSource: {fileID: 0}
   defaultFOV: 1
   enemyGroup: {fileID: 0}
   scopeSprite: {fileID: 0}
   turnSpeed: 10
   startTarget: {fileID: 0}
+  canShoot: 1
+  isReloading: 0
+  playerWeapon: 
+  ammoAmount: 0
+  damageAmount: 0
+  reloadTime: 0
+  fireRate: 0
+  isAutomatic: 0
+  recoilRate: 0
+  gunSound: {fileID: 0}
+  enemyHealth: 0
+  AWP_shot: {fileID: 8300000, guid: 0ddfa7642e28b9d47b60b0a0c098cd03, type: 3}
+  AK_shot: {fileID: 8300000, guid: 737f16451788fe04ea4921be8c2a9296, type: 3}
+  M4_shot: {fileID: 8300000, guid: 0d0774ff52678a94ea8544e4cae81c42, type: 3}
+  USP_shot: {fileID: 8300000, guid: c7877e53e0d09a24a8953e6cc2f85425, type: 3}
 --- !u!114 &7811225582292031928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +133,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be036381bceb1cb419785bf1521d9010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sniperShot: {fileID: 8300000, guid: b2afa954eeb0e6a49866c65ac8102427, type: 3}
-  sniperZoom: {fileID: 8300000, guid: cbe89f73550f3fc4cad2b1dc8f483576, type: 3}
+  playerStats: {fileID: 1525221994}
+  AWP_shot: {fileID: 8300000, guid: 0ddfa7642e28b9d47b60b0a0c098cd03, type: 3}
+  AWP_reload: {fileID: 8300000, guid: fcfcfd1f6be792945a482e210304deda, type: 3}
+  AWP_zoom: {fileID: 8300000, guid: cbe89f73550f3fc4cad2b1dc8f483576, type: 3}
+  AK_shot: {fileID: 8300000, guid: 737f16451788fe04ea4921be8c2a9296, type: 3}
+  AK_reload: {fileID: 8300000, guid: 76feb36a370711f47a0ece4f9d8b277d, type: 3}
+  M4_shot: {fileID: 8300000, guid: 0d0774ff52678a94ea8544e4cae81c42, type: 3}
+  M4_reload: {fileID: 8300000, guid: 34c3949bc83c7ff489782a764291ab5c, type: 3}
+  USP_shot: {fileID: 8300000, guid: c7877e53e0d09a24a8953e6cc2f85425, type: 3}
+  USP_reload: {fileID: 8300000, guid: c074ad79df7f9d04d9f76bcb7ce449a3, type: 3}
   audioSource: {fileID: 0}
+--- !u!114 &1525221994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7811225582292031935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6630fe4db21ba7f4da0373fefbbf283d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthText: {fileID: 0}
+  currentHealth: 100
+  ammoText: {fileID: 0}
+  maxAmmo: 10
+  currentAmmo: 10
+  scoreText: {fileID: 0}
+  highScore: 0
+  currentScore: 0
