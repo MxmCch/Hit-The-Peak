@@ -20,57 +20,56 @@ public class ShootSounds : MonoBehaviour
     public AudioClip USP_reload;
 
     [SerializeField]
-    AudioSource audioSource;
+    public AudioSource audioSource;
     
-    private void Awake() {
+    private void Awake() 
+    {
         playerStats = playerStats.GetComponent<PlayerStats>();
+    }
+    
+    public void PlayReload(string weaponName)
+    {
+        AudioClip reloadSound = USP_reload;
+        
+        if (weaponName == "AWP")
+        {
+            reloadSound = AWP_reload;
+        } 
+        else if (weaponName == "AK")
+        {
+            reloadSound = AK_reload;
+        }
+        else if (weaponName == "M4")
+        {
+            reloadSound = M4_reload;
+        }
+        else if (weaponName == "USP")
+        {
+            reloadSound = USP_reload;
+        }
+        audioSource.GetComponent<AudioSource>().PlayOneShot(reloadSound);
     }
 
     public void PlayShot(string weaponName)
     {
-        if (playerStats.currentAmmo <= 0)
+        AudioClip shotSound = USP_shot;
+        if (weaponName == "AWP")
         {
-            AudioClip reloadSound = USP_reload;
-            
-            if (weaponName == "AWP")
-            {
-                reloadSound = AWP_reload;
-            } 
-            else if (weaponName == "AK")
-            {
-                reloadSound = AK_reload;
-            }
-            else if (weaponName == "M4")
-            {
-                reloadSound = M4_reload;
-            }
-            else if (weaponName == "USP")
-            {
-                reloadSound = USP_reload;
-            }
-            audioSource.GetComponent<AudioSource>().PlayOneShot(reloadSound);
-        }
-        else
+            shotSound = AWP_shot;
+        } 
+        else if (weaponName == "AK")
         {
-            AudioClip shotSound = USP_shot;
-            if (weaponName == "AWP")
-            {
-                shotSound = AWP_shot;
-            } 
-            else if (weaponName == "AK")
-            {
-                shotSound = AK_shot;
-            }
-            else if (weaponName == "M4")
-            {
-                shotSound = M4_shot;
-            }
-            else if (weaponName == "USP")
-            {
-                shotSound = USP_shot;
-            }
-            audioSource.GetComponent<AudioSource>().PlayOneShot(shotSound);
+            shotSound = AK_shot;
         }
+        else if (weaponName == "M4")
+        {
+            shotSound = M4_shot;
+        }
+        else if (weaponName == "USP")
+        {
+            shotSound = USP_shot;
+        }
+        audioSource.GetComponent<AudioSource>().PlayOneShot(shotSound);
     }
 
     public void PlayZoom()

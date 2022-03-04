@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Inferno_CS_Spawn.unity
     guid: 6dd810f4ce697644180229e28247df72
+  - enabled: 1
+    path: Assets/Scenes/Dust2_B.unity
+    guid: 8ae7ce0cf805e8644bd39cb6a79c698f
+  - enabled: 1
+    path: Assets/Scenes/Cache_Site.unity
+    guid: bc7b17dd14e024241b4d8789ef0d94be
   m_configObjects: {}

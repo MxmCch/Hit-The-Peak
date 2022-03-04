@@ -13,7 +13,7 @@ public class ChangeTarget : MonoBehaviour
     AudioSource audioSource;
 
     // 1-noscope, 2-1xscope, 3-2xscope
-    public int defaultFOV = 1;
+    public int defaultFOV = 3;
     Quaternion defaultCameraRotation;
     public GameObject enemyGroup;
 
@@ -55,37 +55,41 @@ public class ChangeTarget : MonoBehaviour
     public AudioClip M4_shot;
     public AudioClip USP_shot;
 
-    private void OnEnable() 
+    public void SelectWeapon(string selectedWeapon)
     {
-        if (playerWeapon == "AWP")
+        if (selectedWeapon == "AWP")
         {
+            playerWeapon = "AWP";
             ammoAmount = 10;
             damageAmount = 115;
             reloadTime = 3.7f;
-            fireRate = 1.46f;
+            fireRate = 0.7f;
             isAutomatic = false;
             gunSound = AWP_shot;
-        } 
-        else if (playerWeapon == "AK")
+        }
+        else if (selectedWeapon == "AK")
         {
+            playerWeapon = "AK";
             ammoAmount = 30;
-            damageAmount = 35;
-            reloadTime = 2.4f;
+            damageAmount = 50;
+            reloadTime = 3.1f;
             fireRate = 0.1f;
             isAutomatic = true;
             gunSound = AK_shot;
-        } 
-        else if (playerWeapon == "M4")
+        }
+        else if (selectedWeapon == "M4")
         {
+            playerWeapon = "M4";
             ammoAmount = 30;
-            damageAmount = 33;
+            damageAmount = 40;
             reloadTime = 3.1f;
-            fireRate = 0.09f;
+            fireRate = 0.07f;
             isAutomatic = true;
             gunSound = M4_shot;
-        } 
-        else if (playerWeapon == "USP")
+        }
+        else if (selectedWeapon == "USP")
         {
+            playerWeapon = "USP";
             ammoAmount = 12;
             damageAmount = 33;
             reloadTime = 2.7f;
@@ -94,7 +98,7 @@ public class ChangeTarget : MonoBehaviour
             gunSound = USP_shot;
         }
     }
- 
+    float recoil = 1;
     void Start()
     {
         playerStats = playerStats.GetComponent<PlayerStats>();
@@ -169,7 +173,7 @@ public class ChangeTarget : MonoBehaviour
                 }
             }
         }
-        
+        recoil = Mathf.Lerp(recoil,1, Time.deltaTime);
         Quaternion wantedRotation = Quaternion.LookRotation(- transform.position + currentTarget.transform.position);
         transform.rotation = Quaternion.Lerp(transform.rotation, wantedRotation, Time.deltaTime * turnSpeed);
     }
@@ -206,7 +210,7 @@ public class ChangeTarget : MonoBehaviour
     public void ShootEnemy()
     {
         Vector3 randomSpray;
-        if (defaultFOV == 1)
+        if (defaultFOV == 1 && playerWeapon == "AWP")
         {
             randomSpray = new Vector3(Random.Range(-15,15),Random.Range(-15,15),0);
         }
@@ -216,9 +220,8 @@ public class ChangeTarget : MonoBehaviour
         }
 
         //check if has ammo
-        if (playerStats.currentAmmo <= 0)
+        if (playerStats.currentAmmo <= 0 && !isReloading)
         {
-            
             //shootSounds.NoAmmo();
             canShoot = false;
             StartReloadAmmo();
@@ -227,9 +230,6 @@ public class ChangeTarget : MonoBehaviour
         {
             if (canShoot && !isReloading)
             {
-                canShoot = false;
-                StartCoroutine(FireRateControll());
-
                 shootSounds.PlayShot(playerWeapon);
 
                 playerStats.currentAmmo = playerStats.currentAmmo - 1;
@@ -240,53 +240,60 @@ public class ChangeTarget : MonoBehaviour
                     if (hit.transform.tag == "Enemy")
                     {
                         hit.transform.GetComponent<EnemyShooting>().enemyHealth = hit.transform.GetComponent<EnemyShooting>().enemyHealth - Mathf.RoundToInt(damageAmount);
-                        playerStats.currentScore = playerStats.currentScore + 1;
                     }
                 }
+                Quaternion wantedRotation = Quaternion.LookRotation(- transform.position + currentTarget.transform.position + new Vector3(0,recoil,0));
+                transform.rotation = Quaternion.Lerp(transform.rotation, wantedRotation, Time.deltaTime*5);
+                
+                recoil++;
             }
         }
     }
+
+    bool justShot = true;
     Coroutine Shooting;
     public void BeginShooting()
     {
-        //Shooting = StartCoroutine(ShootPlayer());
+        if (justShot)
+        {
+            justShot = false;
+            Shooting = StartCoroutine(ShootPlayer());
+            StartCoroutine(ShootCheck());
+        }
     }
-    
+    IEnumerator ShootCheck()
+    {
+        yield return new WaitForSeconds(fireRate);
+        justShot = true;
+    }
+
     public void StopShooting()
     {
         StopCoroutine(Shooting);
     }
-/*
+
     IEnumerator ShootPlayer()
     {
-        while (true)
+        if (isAutomatic)
         {
-            //Random shoot sfx
-            int randomShots = Random.Range(3,6);
-            int damageDealt = Mathf.RoundToInt(damageAmount/randomShots);
-            for (int i = 0; i < randomShots; i++)
+            while (true)
             {
-                audioSource.PlayOneShot(gunSound);
-
-                StartCoroutine(DealDamage(damageDealt));
-                StartCoroutine(ShowDamage());
-
+                ShootEnemy();
                 yield return new WaitForSeconds(fireRate);
-            }
+                justShot = true;
+            } 
         }
-    }*/
-
-    public void csky()
-    {
-        Debug.Log(1);
+        else
+        {
+            ShootEnemy();
+            scopeSprite.SetActive(false);
+            this.GetComponent<Camera>().fieldOfView = 55;
+            defaultFOV = 1;
+            yield return new WaitForSeconds(fireRate);
+            justShot = true;
+        }
     }
-
-    IEnumerator FireRateControll()
-    {
-        yield return new WaitForSeconds(1f);
-        canShoot = true;
-    }
-
+    
     public void StartReloadAmmo()
     {
         if (!isReloading)
@@ -294,42 +301,50 @@ public class ChangeTarget : MonoBehaviour
             reloadingCoroutine = StartCoroutine(ReloadAmmo());
         }
     }
+    [SerializeField]
+    GameObject reloadWheel;
 
     IEnumerator ReloadAmmo()
     {
+        //StartCoroutine(ReloadVisual());
+        shootSounds.PlayReload(playerWeapon);
         isReloading = true;
-        Debug.Log("Reloading!");
         canShoot = false;
-        //change to reload time
-        yield return new WaitForSeconds(3f);
-        //change to max ammo
+        yield return new WaitForSeconds(reloadTime/2);
         playerStats.currentAmmo = playerStats.maxAmmo;
         canShoot = true;
         isReloading = false;
     }
 
+    IEnumerator ReloadVisual()
+    {   
+        reloadWheel.SetActive(true);
+        while (reloadWheel.GetComponent<Image>().fillAmount < 1)
+        { 
+            reloadWheel.GetComponent<Image>().fillAmount = Mathf.Lerp(0,1,Time.deltaTime/reloadTime); 
+        }
+        yield return null;
+        reloadWheel.SetActive(false);
+    }
+
     public void ScopeZoom()
     {
-        shootSounds.PlayZoom();
-        if (defaultFOV == 1)
+        if (playerWeapon == "AWP")
         {
-            scopeSprite.SetActive(true);
-            this.GetComponent<Camera>().fieldOfView = 19;
-            defaultFOV = 2;
-            StartCoroutine(ShakeCamera());
-        }
-        else if (defaultFOV == 2)
-        {
-            scopeSprite.SetActive(true);
-            this.GetComponent<Camera>().fieldOfView = 7;
-            defaultFOV = 3;
-            StartCoroutine(ShakeCamera());
-        }
-        else if (defaultFOV == 3)
-        {
-            scopeSprite.SetActive(false);
-            this.GetComponent<Camera>().fieldOfView = 60;
-            defaultFOV = 1;
+            shootSounds.PlayZoom();
+            if (defaultFOV == 1)
+            {
+                scopeSprite.SetActive(true);
+                this.GetComponent<Camera>().fieldOfView = 19;
+                defaultFOV = 2;
+                StartCoroutine(ShakeCamera());
+            }
+            else if (defaultFOV == 2)
+            {
+                scopeSprite.SetActive(false);
+                this.GetComponent<Camera>().fieldOfView = 55;
+                defaultFOV = 1;
+            }
         }
     }
 

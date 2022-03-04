@@ -10,27 +10,19 @@ public class PrefSettings : MonoBehaviour
 {
     public AudioMixer masterMixer;
 
-    public TextMeshProUGUI masterImage;
-    public TextMeshProUGUI sfxImage;
-    public TextMeshProUGUI musicImage; 
+    public Slider sfxImage;
+    //public Slider musicImage; 
     
     private void Start() {
-        SoundOption(masterImage.GetComponent<TextMeshProUGUI>(), "MasterVolume");
-        SoundOption(sfxImage.GetComponent<TextMeshProUGUI>(), "SFXVolume");
-        SoundOption(musicImage.GetComponent<TextMeshProUGUI>(), "MusicVolume");
+        SoundOption(sfxImage, "SFXVolume");
+        //SoundOption(musicImage, "MusicVolume");
     }
     
-    private void SoundOption(TextMeshProUGUI text, string playerPrefName)
+    private void SoundOption(Slider text, string playerPrefName)
     {
         float lastSound = PlayerPrefs.GetFloat(playerPrefName);
 
-        if (lastSound == 0)
-        {
-            text.text = "ON";
-        }else if (lastSound == -80)
-        {
-            text.text = "OFF";
-        }
+        text.value = lastSound;
 
         masterMixer.SetFloat(playerPrefName, lastSound);
     }

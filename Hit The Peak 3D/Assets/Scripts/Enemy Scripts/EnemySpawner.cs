@@ -31,29 +31,36 @@ public class EnemySpawner : MonoBehaviour
             spawnDelayDelayer = 1;
         }    
     }
-
-    bool skipOne = false;
+    
     private void OnEnable() {
         StartCoroutine(SpawnEnemy());
     }
 
-    IEnumerator SpawnEnemy(){
-        
-        if (skipOne)
+    IEnumerator SpawnEnemy()
+    {
+        int round2 = 0;
+        yield return new WaitForSeconds(5f);
+        while(true)
         {
-            while(true)
+            round2++;
+            this.transform.GetChild(Random.Range(0,this.transform.childCount)).gameObject.SetActive(true);
+
+            if (round2 >= 5)
             {
                 this.transform.GetChild(Random.Range(0,this.transform.childCount)).gameObject.SetActive(true);
-                if (1.5f < spawnDelay)
-                {
-                    spawnDelay -= 0.15f * spawnDelayDelayer;
-                }
-                yield return new WaitForSeconds(spawnDelay);
             }
-        }
-        else
-        {
-            skipOne = true;
+
+            if (round2 >= 10)
+            {
+                this.transform.GetChild(Random.Range(0,this.transform.childCount)).gameObject.SetActive(true);
+            }
+
+            if (1.5f < spawnDelay)
+            {
+                spawnDelay -= 0.15f * spawnDelayDelayer;
+            }
+
+            yield return new WaitForSeconds(spawnDelay);
         }
     }
 }

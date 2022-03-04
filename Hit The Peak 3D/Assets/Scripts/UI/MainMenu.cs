@@ -10,9 +10,14 @@ public class MainMenu : MonoBehaviour
 {
     public AudioMixer masterMixer;
     public bool active = true;
-    public GameObject[] slides;
+
+    public Slider SFX_slider;
+    public Slider Music_slider;
+
+    [SerializeField]
+    GameObject[] playerNames;
     
-    public void MainScene()
+    public void MainMenuScene()
     {
         SceneManager.LoadScene(0);
     }
@@ -22,19 +27,24 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void ChangeDifficulty(int difficultyInt)
-    {
-        PlayerPrefs.SetInt("gameDifficulty", difficultyInt);
-    }
-
     public void InfernoCSspawn()
     {
         SceneManager.LoadScene(2);
     }
 
-    public void FastMode()
+    public void Dust2Mode()
     {
         SceneManager.LoadScene(3);
+    }
+
+    public void CacheMode()
+    {
+        SceneManager.LoadScene(4);
+    }
+
+    public void ReloadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void OpenLink(string URL)
@@ -57,40 +67,65 @@ public class MainMenu : MonoBehaviour
         Application.Quit(); 
     }
     
-    public void SetMasterVolume (TextMeshProUGUI text)
+    public void SetVolume ()
     {
-        string playerPrefName = "MasterVolume";
-        SoundOption(text, playerPrefName);
+        SoundOption(SFX_slider, Music_slider);
     }
 
-    public void SetSFXVolume (TextMeshProUGUI text)
+    public void AWPList()
     {
-        string playerPrefName = "SFXVolume";
-        SoundOption(text, playerPrefName);
+        string[] nameList = {
+            "simple - 100",
+            "zywoo - 90",
+            "device - 80",
+            "kennyS - 70",
+            "Jame - 60",
+            "cadiaN - 50",
+            "falleN - 40",
+            "JW - 30",
+            "mantuu - 20",
+            "degster - 10"
+        };
+        int i = 0;
+        foreach (GameObject item in playerNames)
+        {
+            item.GetComponent<Text>().text = nameList[i];
+            i++;
+        }
     }
 
-    public void SetMusicVolume (TextMeshProUGUI text)
+    public void ARList()
     {
-        string playerPrefName = "MusicVolume";
-        SoundOption(text, playerPrefName);
+        string[] nameList = {
+            "NiKo - 250",
+            "b1T - 200",
+            "eletronic - 175",
+            "ropz - 150",
+            "Twistzz - 125",
+            "mir - 100",
+            "ax1le - 80",
+            "EliGE - 60",
+            "hunter - 40",
+            "hobbit - 20"
+        };
+        
+        int i = 0;
+        foreach (GameObject item in playerNames)
+        {
+            item.GetComponent<Text>().text = nameList[i];
+            i++;
+        }
     }
     
-    private void SoundOption(TextMeshProUGUI text, string playerPrefName)
+    private void SoundOption(Slider SFXslider, Slider MusicSlider)
     {
-        float lastSound = PlayerPrefs.GetFloat(playerPrefName);
-        float setSound = 0;
+        float SFXSetSound = SFXslider.value;
+        //float MusicSetSound = MusicSlider.value;
 
-        if (lastSound == 0)
-        {
-            text.text = "OFF";
-            setSound = -80f;
-            masterMixer.SetFloat(playerPrefName, setSound);
-        }else if (lastSound == -80)
-        {
-            text.text = "ON";
-            setSound = 0;
-            masterMixer.SetFloat(playerPrefName, setSound);
-        }
-        PlayerPrefs.SetFloat(playerPrefName, setSound);
+        masterMixer.SetFloat("SFXVolume", SFXSetSound);
+        //masterMixer.SetFloat("MusicVolume", MusicSetSound);
+
+        PlayerPrefs.SetFloat("SFXVolume", SFXSetSound);
+        //PlayerPrefs.SetFloat("MusicVolume", MusicSetSound);
     }
 }

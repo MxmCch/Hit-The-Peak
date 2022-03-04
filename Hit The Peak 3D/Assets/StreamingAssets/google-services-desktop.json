@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "firebase_url": "https://training-grounds-e3fd7-default-rtdb.firebaseio.com/",
+    "project_number": "101170845116",
+    "project_id": "training-grounds-e3fd7",
+    "storage_bucket": "training-grounds-e3fd7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101170845116:android:21b23ba055a18b9eb0c7b9",
+        "android_client_info": {
+          "package_name": "com.BRNDMOREGROUP.REPUBLEAGUETrainingGrounds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101170845116-ur6dgijogbm6kq45t665nqti2o1nso73.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL_EazmCkNR7uKgYotokcwGi-zxjpa0Io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101170845116-ur6dgijogbm6kq45t665nqti2o1nso73.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

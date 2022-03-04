@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7811225582292031931}
   - component: {fileID: 7811225582292031928}
   - component: {fileID: 1525221994}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player POV
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 55
   orthographic: 0
   orthographic size: 8.82
   m_Depth: -1
@@ -121,6 +121,7 @@ MonoBehaviour:
   AK_shot: {fileID: 8300000, guid: 737f16451788fe04ea4921be8c2a9296, type: 3}
   M4_shot: {fileID: 8300000, guid: 0d0774ff52678a94ea8544e4cae81c42, type: 3}
   USP_shot: {fileID: 8300000, guid: c7877e53e0d09a24a8953e6cc2f85425, type: 3}
+  reloadWheel: {fileID: 0}
 --- !u!114 &7811225582292031928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,3 +165,6 @@ MonoBehaviour:
   scoreText: {fileID: 0}
   highScore: 0
   currentScore: 0
+  deathScreen: {fileID: 0}
+  currentWeapon: 
+  currentMap: 0

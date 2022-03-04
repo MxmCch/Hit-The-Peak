@@ -7,26 +7,34 @@ public class ChooseWeapon : MonoBehaviour
 {
     [SerializeField]
     ChangeTarget changeTarget;
+    PlayerStats playerStats;
 
     private void Awake() {
         Time.timeScale = 0;
+        playerStats = changeTarget.gameObject.GetComponent<PlayerStats>();
     }
 
     public void ChooseWeaponButton(string gunName)
     {
         if (gunName == "AWP")
         {
-            changeTarget.playerWeapon = "AWP";
+            changeTarget.SelectWeapon("AWP");
+            playerStats.currentAmmo = changeTarget.ammoAmount;
+            playerStats.maxAmmo = changeTarget.ammoAmount;
             Time.timeScale = 1;
         }
         else if (gunName == "AK")
         {
-            changeTarget.playerWeapon = "AWP";
+            changeTarget.SelectWeapon("AK");
+            playerStats.currentAmmo = changeTarget.ammoAmount;
+            playerStats.maxAmmo = changeTarget.ammoAmount;
             Time.timeScale = 1;
         }
         else if (gunName == "M4")
         {
-            changeTarget.playerWeapon = "AWP";
+            changeTarget.SelectWeapon("M4");
+            playerStats.currentAmmo = changeTarget.ammoAmount;
+            playerStats.maxAmmo = changeTarget.ammoAmount;
             Time.timeScale = 1;
         }
         StartCoroutine(FadeAway());
@@ -38,23 +46,18 @@ public class ChooseWeapon : MonoBehaviour
         {
             item.gameObject.SetActive(false);
         }
+        this.GetComponent<Image>().raycastTarget = false;
         
-        float timer = 150;
-        float smoother = 0.1f;
+        float timer = 200;
         Color changeAlpha = this.GetComponent<Image>().color;
         while (timer > 0)
         {
-            changeAlpha.a = Mathf.Lerp(changeAlpha.a, 0, Time.deltaTime*smoother);
-            Debug.Log(changeAlpha.a);
+            changeAlpha.a = Mathf.Lerp(changeAlpha.a, 0, Time.deltaTime*1.3f);
             this.GetComponent<Image>().color = changeAlpha;
             timer -= 1;
-            if (smoother != 1)
-            {
-                smoother += 0.02f;
-            }
             yield return new WaitForEndOfFrame();
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         this.gameObject.SetActive(false);
     }
 }

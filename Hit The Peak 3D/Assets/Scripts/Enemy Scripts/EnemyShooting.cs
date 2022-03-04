@@ -21,8 +21,6 @@ public class EnemyShooting : MonoBehaviour
     public AudioClip gunSound;
     public int enemyHealth;
     
-    [SerializeField]
-    AudioSource audioSource;
 
     [SerializeField]
     Text healthText;
@@ -31,14 +29,14 @@ public class EnemyShooting : MonoBehaviour
     Coroutine shootCoroutine;
     bool nextShot = false;
     bool stopShooting = true;
+    AudioSource audioSource;
 
-    int gameDifficulty;
     // Start is called before the first frame update
     private void Awake() 
     {
         enemyMovement = this.GetComponent<EnemyMovement>();
         playerStats = playerStats.GetComponent<PlayerStats>();
-        gameDifficulty = PlayerPrefs.GetInt("gameDifficulty");
+        audioSource = this.transform.GetChild(1).GetComponent<AudioSource>();
     }
 
     private void Update() 
@@ -54,52 +52,19 @@ public class EnemyShooting : MonoBehaviour
         enemyHealth = 100;
         gunClass.GetComponent<GunClass>().GetRandomGun();
         
-        if (gameDifficulty == 1)
-        {
-            ammoAmount = gunClass.ammoAmount;
-            damageAmount = gunClass.damageAmount;
-            reloadTime = gunClass.reloadTime;
-            fireRate = gunClass.fireRate;
-            isAutomatic = gunClass.isAutomatic;
-            recoilRate = gunClass.recoilRate;
-            gunSound = gunClass.gunSound;
-        } 
-        else if (gameDifficulty == 2)
-        {
-            ammoAmount = gunClass.ammoAmount;
-            damageAmount = gunClass.damageAmount;
-            reloadTime = gunClass.reloadTime;
-            fireRate = gunClass.fireRate;
-            isAutomatic = gunClass.isAutomatic;
-            recoilRate = gunClass.recoilRate;
-            gunSound = gunClass.gunSound;
-        } 
-        else if (gameDifficulty == 3)
-        {
-            ammoAmount = gunClass.ammoAmount;
-            damageAmount = gunClass.damageAmount;
-            reloadTime = gunClass.reloadTime;
-            fireRate = gunClass.fireRate;
-            isAutomatic = gunClass.isAutomatic;
-            recoilRate = gunClass.recoilRate;
-            gunSound = gunClass.gunSound;
-        } 
-        else if (gameDifficulty == 4)
-        {
-            ammoAmount = gunClass.ammoAmount;
-            damageAmount = gunClass.damageAmount;
-            reloadTime = gunClass.reloadTime;
-            fireRate = gunClass.fireRate;
-            isAutomatic = gunClass.isAutomatic;
-            recoilRate = gunClass.recoilRate;
-            gunSound = gunClass.gunSound;
-        }
-        Debug.Log(gunSound.name);
+        ammoAmount = gunClass.ammoAmount;
+        damageAmount = gunClass.damageAmount;
+        reloadTime = gunClass.reloadTime;
+        fireRate = gunClass.fireRate;
+        isAutomatic = gunClass.isAutomatic;
+        recoilRate = gunClass.recoilRate;
+        gunSound = gunClass.gunSound;
     }
 
     private void OnDisable() {
         playerStats.currentScore = playerStats.currentScore + 1; 
         StopCoroutine(ShootPlayer());
+        stopShooting = true;
     }
 
     IEnumerator ShootPlayer()
